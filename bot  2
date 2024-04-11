@@ -1,0 +1,92 @@
+import discord
+import random
+import os
+from discord.ext import commands
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Привет! Я бот {bot.user}!')
+@bot.command()
+async def buy(ctx):
+    await ctx.send('Пока, мой господин')
+
+
+@bot.command()
+async def heh(ctx, count_heh: int):
+    await ctx.send("he" * count_heh)
+
+@bot.command()
+async def equation(ctx, first: int, action: str, second: int):
+      if action == "+":
+            await ctx.send(first + second)
+      elif action == "-":
+            await ctx.send(first - second)
+      elif action == "*":
+            await ctx.send(first * second)
+      elif action == "/":
+            await ctx.send(first / second)
+spis = []
+@bot.command()
+async def choose(ctx, fc: str, sc: str):
+     spis.append(fc)
+     spis.append(sc)
+     random.choice(spis)
+     if random.choice(spis) == fc:
+          await ctx.send(fc)
+     else:
+           await ctx.send(sc)    
+     spis.remove(fc)
+     spis.remove(sc)
+
+@bot.command()
+async def repeat(ctx, content: str, times: int):
+    """Repeats a message multiple times."""
+    for i in range(times):
+        await ctx.send(content)
+@bot.command()
+async def emojes(ctx):
+      listik = ['😎👍','🤤🍕','🎶😊','😍','😎🍿','😉👌','🤔💬','😡👊','🔫🤠','🎤😃','☝️🤓','🎁😊','😎🚬','😃💡','😣💢','🤑💰','🔥🙂🔥'] 
+      smile = random.choice(listik) 
+      await ctx.send(smile)
+@bot.command()
+async def create_new_nikname(ctx, long: int):
+      elementers = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+      nicname = ""
+      for i in range(long):
+            nicname += random.choice(elementers)
+      await ctx.send(nicname)
+@bot.command()
+async def function(ctx):
+     await ctx.send('hello-buy= приветствие и прощание,'
+                    ' heh - просто прикольная команда, напиши heh а затем напиши число, сколько раз оно повториться,'
+                    ' equation- канкулятор(на два числа), испоьзуться + - * /(деление),'
+                    ' choose - рандомный выбор между чем то,'
+                    ' repeat - повторяет любое слово(напиши слово, пробел и цифру),'
+                    ' emojes - вызывает любую эмоцию,'
+                    ' create_new_nikname- создает любой никнейм с любой длиной рандомно')
+
+
+@bot.command()
+async def mem(ctx):
+    im = os.listdir('images')
+    img_name = random.choice(im)
+    with open(f'images/{img_name}', 'rb') as f:
+        # В переменную кладем файл, который преобразуется в файл библиотеки Discord!
+        picture = discord.File(f)
+   # Можем передавать файл как параметр!
+    await ctx.send(file=picture)
+
+
+
+     
+
+bot.run('')
